@@ -13,11 +13,11 @@ variable "region" {
 variable "cluster_version" {
   type        = string
   description = "The Kubernetes version for our clusters"
-  default     = "1.21.2"
+  default     = "1.22.4"
 }
 
 variable "cidr" {
   type        = string
   description = "The CIDR block to use for this demo"
-  default     = "10.0.0.0/16"
+  default     = "11.0.0.0/16"
 }
