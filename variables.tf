@@ -15,3 +15,9 @@ variable "cluster_version" {
   description = "The Kubernetes version for our clusters"
   default     = "1.21.2"
 }
+
+variable "cidr" {
+  type        = string
+  description = "The CIDR block to use for this demo"
+  default     = "10.0.0.0/16"
+}
