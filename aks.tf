@@ -7,7 +7,10 @@ module "aks" {
   orchestrator_version = var.cluster_version
   resource_group_name  = azurerm_resource_group.project.name
   prefix               = var.project_name
-  agents_count         = 3
+  enable_auto_scaling  = true
+  agents_count         = null
+  agents_min_count     = 1
+  agents_max_count     = 10
   vnet_subnet_id       = module.network.vnet_subnets[0]
   os_disk_size_gb      = 100
 
