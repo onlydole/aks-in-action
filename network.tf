@@ -4,12 +4,19 @@ module "network" {
   version = "3.5.0"
 
   resource_group_name = azurerm_resource_group.project.name
-  address_space       = "11.0.0.0/16"
-  subnet_prefixes     = ["11.0.1.0/24"]
-  subnet_names        = ["subnet1"]
+  address_space       = var.cidr
+  subnet_prefixes     = local.private_subnets
 
   # see https://www.terraform.io/docs/language/meta-arguments/depends_on.html
   depends_on = [
     azurerm_resource_group.project
+  ]
+}
+
+locals {
+  private_subnets = [
+    cidrsubnet(var.cidr, 8, 1),
+    cidrsubnet(var.cidr, 8, 2),
+    cidrsubnet(var.cidr, 8, 3)
   ]
 }

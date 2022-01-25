@@ -14,14 +14,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Lint Code
-        uses: docker://github/super-linter:v3
+      - name: Lint Configuration
+        uses: github/super-linter/slim@v4
         env:
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JSCPD: false
+          VALIDATE_TERRAFORM_TERRASCAN: false
           DEFAULT_BRANCH: "main"
-          DISABLE_ERRORS: false
-          VALIDATE_BASH: true
-          VALIDATE_JSON: true
-          VALIDATE_MD: true
-          VALIDATE_TERRAFORM: true
-          VALIDATE_YAML: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
