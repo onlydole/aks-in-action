@@ -1,7 +1,7 @@
 # see https://registry.terraform.io/modules/Azure/aks/azurerm
 module "aks" {
   source  = "Azure/aks/azurerm"
-  version = "4.13.0"
+  version = "4.14.0"
 
   kubernetes_version   = var.cluster_version
   orchestrator_version = var.cluster_version
