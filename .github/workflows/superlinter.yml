@@ -17,6 +17,7 @@ jobs:
       - name: Lint Configuration
         uses: github/super-linter/slim@v4
         env:
+          MULTI_STATUS: false
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
           VALIDATE_TERRAFORM_TERRASCAN: false
