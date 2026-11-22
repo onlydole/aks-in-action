@@ -15,8 +15,10 @@
 
 To use the code in this repository, you will need the following applications:
 
-- [HashiCorp Terraform](https://www.terraform.io/downloads.html) `1.0.0` (or later)
+- [HashiCorp Terraform](https://www.terraform.io/downloads.html) `1.9.0` (or later)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) `2.29.0` (or later)
+
+This configuration uses the AzureRM provider `4.x`, which needs a subscription ID. Set it before you run `terraform plan`, for example with `export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"`.
 
 ### Additional Reading
 

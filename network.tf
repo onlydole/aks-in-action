@@ -1,11 +1,21 @@
-# see https://registry.terraform.io/modules/Azure/network/azurerm/latest
+# The Azure/network/azurerm module is archived and only supports AzureRM 3.x.
+# This uses its Azure Verified Modules (AVM) replacement instead.
+# see https://registry.terraform.io/modules/Azure/avm-res-network-virtualnetwork/azurerm/latest
 module "network" {
-  source  = "Azure/network/azurerm"
-  version = "3.5.0"
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.23.0"
 
-  resource_group_name = azurerm_resource_group.project.name
-  address_space       = var.cidr
-  subnet_prefixes     = local.private_subnets
+  name          = "${var.project_name}-vnet"
+  location      = azurerm_resource_group.project.location
+  parent_id     = azurerm_resource_group.project.id
+  address_space = [var.cidr]
+
+  subnets = {
+    for index, prefix in local.private_subnets : "subnet${index + 1}" => {
+      name             = "subnet${index + 1}"
+      address_prefixes = [prefix]
+    }
+  }
 
   # see https://www.terraform.io/docs/language/meta-arguments/depends_on.html
   depends_on = [
