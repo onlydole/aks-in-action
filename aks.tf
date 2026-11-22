@@ -8,6 +8,7 @@ module "aks" {
   resource_group_name  = azurerm_resource_group.project.name
   location             = azurerm_resource_group.project.location
   prefix               = var.project_name
+  admin_username       = "azureuser"
   auto_scaling_enabled = true
   agents_count         = null
   agents_min_count     = 1
