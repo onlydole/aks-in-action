@@ -7,6 +7,7 @@
 - [AKS in Action](#aks-in-action)
   - [Table of Contents](#table-of-contents)
   - [Requirements](#requirements)
+    - [Before you apply](#before-you-apply)
   - [Additional Reading](#additional-reading)
   - [Author Information](#author-information)
   - [License](#license)
@@ -19,6 +20,26 @@ To use the code in this repository, you will need the following applications:
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) `2.29.0` (or later)
 
 This configuration uses the AzureRM provider `4.x`, which needs a subscription ID. Set it before you run `terraform plan`, for example with `export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"`.
+
+### Before you apply
+
+- **Kubernetes version.** `cluster_version` defaults to `1.36`, and AKS runs the latest GA patch of that minor. New minors don't reach every region on the same day. Check what your region offers and override the default when you need to.
+
+  ```shell
+  az aks get-versions --location westus --output table
+  terraform apply -var="cluster_version=1.37"
+  ```
+
+- **Subnet permissions.** The cluster uses kubenet, a system-assigned managed identity, and the `subnet1` subnet from this configuration. AKS needs that identity to hold at least the [Network Contributor](https://learn.microsoft.com/en-us/azure/aks/configure-kubenet) role on the subnet. Terraform doesn't create that role assignment for you. Once the cluster exists, grant it with this command.
+
+  ```shell
+  az role assignment create \
+    --assignee "$(az aks show -g aks-in-action -n aks-in-action-aks --query identity.principalId -o tsv)" \
+    --role "Network Contributor" \
+    --scope "$(az network vnet subnet show -g aks-in-action --vnet-name acctvnet -n subnet1 --query id -o tsv)"
+  ```
+
+  You can also set `create_role_assignment_network_contributor = true` on `module.aks`. That only works if the identity running Terraform has Owner, User Access Administrator, or Role Based Access Control Administrator, because Contributor can't create role assignments.
 
 ### Additional Reading
 

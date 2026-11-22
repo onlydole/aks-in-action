@@ -15,11 +15,11 @@ module "aks" {
   os_disk_size_gb      = 100
 
   vnet_subnet = {
-    id = module.network.subnets["subnet1"].resource_id
+    id = azurerm_subnet.subnet1.id
   }
 
   # see https://www.terraform.io/docs/language/meta-arguments/depends_on.html
   depends_on = [
-    module.network
+    azurerm_subnet.subnet1
   ]
 }

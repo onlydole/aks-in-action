@@ -1,26 +1,35 @@
-# The Azure/network/azurerm module is archived and only supports AzureRM 3.x.
-# This uses its Azure Verified Modules (AVM) replacement instead.
-# see https://registry.terraform.io/modules/Azure/avm-res-network-virtualnetwork/azurerm/latest
-module "network" {
-  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.23.0"
+# These resources replace the archived Azure/network/azurerm module, which
+# only supports AzureRM 3.x. Names and address ranges match what it created.
+# see https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
+resource "azurerm_virtual_network" "vnet" {
+  name                = "acctvnet"
+  resource_group_name = azurerm_resource_group.project.name
+  location            = azurerm_resource_group.project.location
+  address_space       = [var.cidr]
 
-  name          = "${var.project_name}-vnet"
-  location      = azurerm_resource_group.project.location
-  parent_id     = azurerm_resource_group.project.id
-  address_space = [var.cidr]
-
-  subnets = {
-    for index, prefix in local.private_subnets : "subnet${index + 1}" => {
-      name             = "subnet${index + 1}"
-      address_prefixes = [prefix]
-    }
+  tags = {
+    environment = "dev"
   }
+}
 
-  # see https://www.terraform.io/docs/language/meta-arguments/depends_on.html
-  depends_on = [
-    azurerm_resource_group.project
-  ]
+# The old module only created one subnet, from the first prefix.
+# see https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet
+resource "azurerm_subnet" "subnet1" {
+  name                 = "subnet1"
+  resource_group_name  = azurerm_resource_group.project.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = [local.private_subnets[0]]
+}
+
+# see https://developer.hashicorp.com/terraform/language/moved
+moved {
+  from = module.network.azurerm_virtual_network.vnet
+  to   = azurerm_virtual_network.vnet
+}
+
+moved {
+  from = module.network.azurerm_subnet.subnet[0]
+  to   = azurerm_subnet.subnet1
 }
 
 locals {
