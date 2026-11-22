@@ -1,20 +1,18 @@
 terraform {
+  required_version = ">= 1.9"
+
   required_providers {
     null = {
       source  = "hashicorp/null"
       version = "3.3.2"
     }
-    template = {
-      source  = "hashicorp/template"
-      version = "2.2.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "3.5.0"
-    }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "2.98.0"
+      version = "4.81.0"
+    }
+    azapi = {
+      source  = "Azure/azapi"
+      version = "2.14.0"
     }
     random = {
       source  = "hashicorp/random"

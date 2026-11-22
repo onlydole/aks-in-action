@@ -12,8 +12,8 @@ variable "region" {
 
 variable "cluster_version" {
   type        = string
-  description = "The Kubernetes version for our clusters"
-  default     = "1.22.4"
+  description = "The AKS Kubernetes minor version for our clusters. AKS runs the latest GA patch of this minor."
+  default     = "1.36"
 }
 
 variable "cidr" {
